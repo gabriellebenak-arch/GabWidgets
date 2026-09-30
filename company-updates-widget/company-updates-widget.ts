@@ -69,6 +69,12 @@ function categoryColor(category: string): { bg: string; fg: string } {
   return CATEGORY_COLORS[category.trim().toLowerCase()] || DEFAULT_CATEGORY_COLOR;
 }
 
+// Shown until a real "updates" value is configured in the block settings.
+const DEFAULT_UPDATES =
+  "📅 Meeting | All-Hands Staff Meeting | Join the full team at 2:00 PM today in the main hall | Today; " +
+  "Policy | New Remote Work Guidelines | Updated flexible work policy now in effect | Oct 1; " +
+  "Product | V16 Launch Announced | Our newest vacuum drops next month | Sep 28";
+
 // ── CSS ───────────────────────────────────────────────────────────────────────
 
 const HOST_RESET = `
@@ -90,13 +96,15 @@ const HOST_RESET = `
 `;
 
 const CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
 ${HOST_RESET}
 
 .${P}-root{
   background:transparent;
   padding:20px 22px;
-  font-family:inherit;
-  color:#111827;
+  font-family:'Poppins', sans-serif;
+  color:#ffffff;
   -webkit-font-smoothing:antialiased;
 }
 
@@ -104,16 +112,16 @@ ${HOST_RESET}
   display:flex;align-items:center;gap:10px;margin-bottom:16px;
 }
 .${P}-icon{
-  flex:0 0 auto;color:#9ca3af;display:inline-flex;align-items:center;
+  flex:0 0 auto;color:rgba(255,255,255,.7);display:inline-flex;align-items:center;
 }
 .${P}-title{
-  font-size:16px;font-weight:700;color:#111827;flex:1 1 auto;min-width:0;
+  font-size:16px;font-weight:700;color:#ffffff;flex:1 1 auto;min-width:0;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .${P}-count{
   display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;flex:0 0 auto;
   font-size:11.5px;font-weight:600;letter-spacing:.01em;
-  background:#f3f4f6;color:#6b7280;
+  background:rgba(255,255,255,.12);color:rgba(255,255,255,.85);
 }
 
 .${P}-list{display:flex;flex-direction:column}
@@ -127,7 +135,7 @@ ${HOST_RESET}
   margin-bottom:8px;
 }
 .${P}-card:last-child{margin-bottom:0}
-.${P}-card:hover{background:#f9fafb;transform:translateX(3px)}
+.${P}-card:hover{background:rgba(255,255,255,.06);transform:translateX(3px)}
 
 /* Avatar circle — neutral gray gradient, white category initial */
 .${P}-av{
@@ -140,15 +148,15 @@ ${HOST_RESET}
 
 .${P}-info{flex:1 1 auto;min-width:0}
 .${P}-root .${P}-name{
-  font-size:14px!important;font-weight:600!important;color:#111827!important;
+  font-size:14px!important;font-weight:600!important;color:#ffffff!important;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3!important;
 }
 .${P}-root .${P}-desc{
-  font-size:12px!important;color:#6b7280!important;margin-top:2px!important;line-height:1.4!important;
+  font-size:12px!important;color:rgba(255,255,255,.75)!important;margin-top:2px!important;line-height:1.4!important;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
 .${P}-root .${P}-meta{
-  font-size:11px!important;color:#9ca3af!important;margin-top:4px!important;line-height:1.3!important;
+  font-size:11px!important;color:rgba(255,255,255,.55)!important;margin-top:4px!important;line-height:1.3!important;
 }
 
 .${P}-pill{
@@ -159,7 +167,7 @@ ${HOST_RESET}
 
 .${P}-root .${P}-empty{
   text-align:center;padding:36px 16px;
-  color:#9ca3af!important;font-size:13px!important;line-height:1.5!important;
+  color:rgba(255,255,255,.55)!important;font-size:13px!important;line-height:1.5!important;
 }
 
 @keyframes ${P}-rise{
@@ -195,7 +203,7 @@ const factory: BlockFactory = (BaseBlockClass, widgetApi) => {
       const t   = makeT(BUNDLES, locale);
       const rtl = isRtl(locale);
 
-      const updates = parseUpdates(attr("updates"));
+      const updates = parseUpdates(attr("updates") || DEFAULT_UPDATES);
 
       const heading = attr("widgettitle") || t("widget.title");
 

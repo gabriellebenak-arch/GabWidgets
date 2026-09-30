@@ -152,7 +152,10 @@ function esc(s) {
 }
 function initial(s) {
     const trimmed = s.trim();
-    return trimmed ? trimmed[0].toUpperCase() : "?";
+    if (!trimmed)
+        return "?";
+    const firstChar = Array.from(trimmed)[0];
+    return /\p{Emoji}/u.test(firstChar) ? firstChar : firstChar.toUpperCase();
 }
 function parseUpdates(raw) {
     return raw.split(";")

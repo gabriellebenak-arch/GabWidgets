@@ -30,7 +30,9 @@ function esc(s: string): string {
 
 function initial(s: string): string {
   const trimmed = s.trim();
-  return trimmed ? trimmed[0].toUpperCase() : "?";
+  if (!trimmed) return "?";
+  const firstChar = Array.from(trimmed)[0];
+  return /\p{Emoji}/u.test(firstChar) ? firstChar : firstChar.toUpperCase();
 }
 
 interface CompanyUpdate {
